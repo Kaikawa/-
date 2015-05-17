@@ -1,0 +1,82 @@
+1. Examine the file sample.cmd, which is a set of SST commands. The sytax is fairly obvious. The first line "clear" tells SST to clear out any variables that were previously created; it is useful to start with this command in order to be user that you do not inadvertently use some variable that you created in previous SST runs. The second line "load ..." loads the data along with the variables names from the SST data file. The third line "spool.." specified the output file; it is now named "sample.out". To create a new variable, use "set" followed by the new variable name = the formula to create the new variable. The variable "pd" is created here simply as an example of how to define new variables. It actually has no meaning that I can think of, and there is no reason to include it as an explanatory variable. We include it just as an example, and to give you a code that you need to modify to specify a meaningful model. 
+
+The line "mnl..." tells SST to run a logit model. The dependent variable is given in brackets in "dep[]". (In all SST commands, a slash \ denotes that the command continues on the next line.) Each independent variable is listed in "ivalt[]". In a logit model, each variable takes a different value in each alternative. So, in our case, for example, we want to know the coefficient of installation cost in the logit model of system choice. The variable installation cost in the model actually consists of five variables in the dataset: ic1, ic2, ic3, ic4 and ic5, for the installation costs of the five systems. For each variable that enters the logit model and obtains a coefficient, it is necessary to tell SST the value of the variable for each of the alternatives. In the current code, there are two variables in the logit model. The first variable is called "ic" for installation cost. This variable consists of five variables in the dataset: ic1 in the first alternative, ic2 in the second alternative, etc. For each variable that enters the model, the user must give a name for that variable (such as "ic" or anything you want), followed by a colon, and then the name of a dataset variable for each of the alternatives (in order from first to last alternative). The word "prob[]" tells SST to calculate the probabilities for all but the first alternative and give them the names in brackets. SST does not calculate the probability for the first alternative because it is redundant: this probability is simply one minus the sum of the others. Since we actually want to see this probability, the next line creates it for us. 
+
+The command "cova..." calculates the mean, standard deviation, and other statistics for the variables listed in "var[]". The last line tells SST to stop printing to the output file. 
+
+Even though pb is a meaningless variables, run sample.cmd just to see that you get the same results as in sample.out. Before running the program change the output file name to something other than sample.out; that is, change the command "spool file[sample.out]" to something like "spool file[mine.out]". If you don't make this change, then the new output file will write over the old output file and you won't be able to compare the two.
+
+2. Now modify the code to run a model with installation cost and operating cost, leaving out pb.  
+
+(a) Do the estimated coefficients have the expected signs?  
+
+(b) Are both coefficients significantly different from zero?  
+
+(c) How closely do the average probabilities (from the cova command) match the shares of customers choosing each alternative?
+
+(d) The ratio of coefficients usually provides economically meaningful information. The willingness to pay (wtp) through higher installation cost for a one-dollar reduction in operating costs is the ratio of the operating cost coefficient to the installation cost coefficient. What is the estimated wtp from this model? Is it reasonable in magnitude?  
+
+(e) We can use the estimated wtp to obtain an estimate of the discount rate that is implied by the model of choice of operating system. The present value of the future operating costs is the discounted sum of operating costs over the life of the system: PV=sum[OC/(1+r)^t] where r is the discount rate and the sum is
+over t=1,...,L with L being the life of the system. As L rises, the PV approaches (1/r)OC. Therefore, for a system with a sufficiently long life (which we will assume these systems have), a one-dollar reduction in OC reduces the present value of future operating costs by (1/r). This means that if the person choosing the system were incurring the installation costs and the operating costs over the life of the system, and rationally traded-off the two at a discount rate of r, the decisionmaker's wtp for operating cost reductions would be (1/r). Given this, what value of r is implied by the estimated wtp that you calculated in part (c)? Is this reasonable?
+
+3. Estimate a model that imposes the constraint that r=.12 (such that wtp=8.33). Test the hypothesis that r=.12.
+
+4. Add alternative-specific constants to the model. These are included by creating two variables:
+
+set zero=0
+set one=1
+
+Then use these variables to create constants in the estimation command:
+
+mnl dep[depvar] \
+    ivalt [ ic: ic1 ic2 ic3 ic4 ic5 \
+            oc: oc1 oc2 oc3 oc4 oc5 \
+            c1: one zero zero zero zero \
+            c2: zero one zero zero zero \
+            c3: zero zero one zero zero \
+            c4: zero zero zero one zero ] \
+     prob[p2 p3 p4 p5]
+
+Note that c1 is a variable in the logit model that takes the value of 1 in the first alternative and 0 in second through fifth alternatives. Similarly for c2-c4. The constant c5 is left out, which is equivalent to normalizing it to zero. With J alternatives, at most J-1 alternative-specific constants can be estimated. The coefficients of c1-c4 are interpreted as relative to alternative 5.
+
+(a) How well do the estimated probabilities match the shares of customers choosing each alternative? Note that they match exactly: alternative-specific constants in a logit model insure that the average probabilities equal the observed shares.
+
+(b) Calculate the wtp and discount rate r that is implied by the estimates. Are these reasonable?
+
+(c) This model contains constants for alternatives 1-4, with the constant for alternative 5 normalized to zero. Suppose you had included constants for alternatives 1,3,4, and 5, with the constant for alternative 2 normalized to zero. What would be the estimated coefficient of the constant for alternative 1? Figure this out logically rather than actually estimating the model.
+
+5. Now try some models with sociodemographic variables entering.
+
+(a) Enter installation cost divided by income, instead of installation cost. That is, create new variables:
+
+set icinc1 = ic1 / income
+set ininc2 = ic2 / income
+
+etc, and enter these variables in the mnl command instead of ic1 - ic5.  With this specification, the magnitude of the installation cost coefficient is inversely related to income, such that high income households are less concerned with installation costs than lower income households. Does dividing installation cost by income seem to make the model better or worse?
+
+(b) Instead of dividing installation cost by income, enter alternative-specific income effects. The mnl command will look like:
+
+mnl dep[depvar] \
+    ivalt [ ic: ic1 ic2 ic3 ic4 ic5 \
+            oc: oc1 oc2 oc3 oc4 oc5 \
+            c1: one zero zero zero zero \
+            c2: zero one zero zero zero \
+            c3: zero zero one zero zero \
+            c4: zero zero zero one zero \
+            i1: income zero zero zero zero \
+            i2: zero income zero zero zero \
+            i3: zero zero income zero zero \
+            i4: zero zero zero income zero ]
+
+What do the estimates imply about the impact of income on the choice of central systems versus room system? Do these income terms enter significantly?
+
+(c) Try other models. Determine which model you think is best from these data.
+
+6. We now are going to consider the use of logit model for prediction. The file frcst.cmd estimates a model with installation costs, operating costs, and alternative specific constants. The program calculates the probabilities for each house explicitly, rather than using the prob[] option within mnl. Go over the commands so that you understand what they do. You will need to revise the commands to do forecasting. Just to be sure everything is working right, run frcst.cmd (changing the output file name) and make sure that the output is the same as frcst.out. Also, check to be sure that the mean probabilities are the same as you got in exercise 4.
+
+7. The California Energy Commission (CEC) is considering whether to offer rebates on heat pumps. The CEC wants to predict the effect of the rebates on the heating system choices of customers in California. The rebates will be set at 10% of the installation cost. The new installation cost for heat pumps will therefore be: set nic5=.90*ic5 . Using the estimated coefficients from the model in execise 6, calculate new probabilities and predicted shares using nic5 instead of ic5. How much do the rebates raise the share of houses with heat pumps?
+
+8. Suppose a new technology is developed that provides more efficient central heating. The new technology costs $200 more than the central electric system that we have specified as our alternative 3. However, it saves 25% of the electricity, such that its operating costs are 75% of the operating costs of our alternative 3. We want to predict the potential market penetration of this technology. Note that there are now six alternatives: the original five alternatives plus this new one. Revise frcst.cmd to calculate the probability and predict the market share (i.e., the average probability) for all six alternatives, using the model that is estimated on the original five alternatives. (Be sure to use the original installation cost for heat pumps, rather than the reduced cost in exercise 7.) What is the predicted market share for the new technology? From which of the original five systems does the new technology draw the most customers?
+
+
+

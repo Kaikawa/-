@@ -1,0 +1,215 @@
+
+SST Spool File:  frcst2.out
+
+set one=1
+set zero=0
+
+mnl dep[depvar] \
+	ivalt[ic: ic1 ic2 ic3 ic4 ic5 \
+	      oc: oc1 oc2 oc3 oc4 oc5  \
+              c1: one zero zero zero zero \
+              c2: zero one zero zero zero \
+              c3: zero zero one zero zero \
+              c4: zero zero zero one zero ]  \
+	coef[beta]
+
+
+********** MULTINOMIAL LOGIT **********
+Dependent variable: depvar
+
+Value        Label        Count        Percent
+    1                      573          63.67
+    2                      129          14.33
+    3                       64           7.11
+    4                       84           9.33
+    5                       50           5.56
+
+ITERATION  1:   OLD LLF =      -1.44849e+003     STEP =            0.74922     
+                NEW LLF =      -1.02212e+003     GRAD*DIREC =      1.10875e+003
+
+ITERATION  2:   OLD LLF =      -1.02212e+003     STEP =            0.93640     
+                NEW LLF =      -1.00839e+003     GRAD*DIREC =     28.68946     
+
+ITERATION  3:   OLD LLF =      -1.00839e+003     STEP =            1.01246     
+                NEW LLF =      -1.00823e+003     GRAD*DIREC =      0.32561     
+
+At convergence grad * dir =       1.04724e-005
+
+
+Independent        Estimated             Standard                 t-
+ Variable         Coefficient             Error               Statistic
+
+       ic          -1.53281e-003          6.20857e-004         -2.46886     
+       oc          -6.99672e-003          1.55411e-003         -4.50207     
+       c1           1.71074               0.22673               7.54530     
+       c2           0.30777               0.20658               1.48983     
+       c3           1.65861               0.44842               3.69879     
+       c4           1.85315               0.36195               5.11991     
+
+auxiliary statistics              at convergence      initial
+log likelihood                      -1008.2          -1448.5 
+number of observations                  900
+percent correctly predicted          63.667
+
+
+set v1=beta[1]*ic1 + beta[2]*oc1 + beta[3] 
+set v2=beta[1]*ic2 + beta[2]*oc2 + beta[4]
+set v3=beta[1]*ic3 + beta[2]*oc3 + beta[5]
+set v4=beta[1]*ic4 + beta[2]*oc4 + beta[6]
+set v5=beta[1]*ic5 + beta[2]*oc5 
+
+set denom=exp(v1)+exp(v2)+exp(v3)+exp(v4)+exp(v5)
+
+set p1=exp(v1)/denom
+set p2=exp(v2)/denom
+set p3=exp(v3)/denom
+set p4=exp(v4)/denom
+set p5=exp(v5)/denom
+
+cova var[p1 p2 p3 p4 p5]
+
+Variable:       p1     
+
+Mean                    0.63668      Standard deviation      5.18230e-002
+Minimum                 0.44031      Skewness               -0.27663     
+Maximum                 0.79204      Kurtosis                2.96429     
+Valid observations       900
+
+Variable:       p2     
+
+Mean                    0.14331      Standard deviation      2.38976e-002
+Minimum                 7.79499e-002 Skewness                0.40907     
+Maximum                 0.22512      Kurtosis                3.03415     
+Valid observations       900
+
+Variable:       p3     
+
+Mean                    7.11068e-002 Standard deviation      2.67599e-002
+Minimum                 2.11559e-002 Skewness                1.00105     
+Maximum                 0.21287      Kurtosis                4.70338     
+Valid observations       900
+
+Variable:       p4     
+
+Mean                    9.33299e-002 Standard deviation      3.32448e-002
+Minimum                 2.55509e-002 Skewness                1.10581     
+Maximum                 0.28268      Kurtosis                5.60933     
+Valid observations       900
+
+Variable:       p5     
+
+Mean                    5.55743e-002 Standard deviation      1.09931e-002
+Minimum                 3.19038e-002 Skewness                0.62313     
+Maximum                 9.93483e-002 Kurtosis                3.45074     
+Valid observations       900
+
+
+set v5=beta[1]*ic5*(.9) + beta[2]*oc5 
+
+set denom=exp(v1)+exp(v2)+exp(v3)+exp(v4)+exp(v5)
+
+set p1=exp(v1)/denom
+set p2=exp(v2)/denom
+set p3=exp(v3)/denom
+set p4=exp(v4)/denom
+set p5=exp(v5)/denom
+
+cova var[p1 p2 p3 p4 p5]
+
+Variable:       p1     
+
+Mean                    0.63066      Standard deviation      5.12349e-002
+Minimum                 0.43709      Skewness               -0.26851     
+Maximum                 0.78525      Kurtosis                2.95476     
+Valid observations       900
+
+Variable:       p2     
+
+Mean                    0.14194      Standard deviation      2.36005e-002
+Minimum                 7.72482e-002 Skewness                0.40810     
+Maximum                 0.22251      Kurtosis                3.03209     
+Valid observations       900
+
+Variable:       p3     
+
+Mean                    7.04505e-002 Standard deviation      2.65625e-002
+Minimum                 2.09164e-002 Skewness                1.00594     
+Maximum                 0.21151      Kurtosis                4.72636     
+Valid observations       900
+
+Variable:       p4     
+
+Mean                    9.24668e-002 Standard deviation      3.30000e-002
+Minimum                 2.52342e-002 Skewness                1.11005     
+Maximum                 0.28061      Kurtosis                5.62892     
+Valid observations       900
+
+Variable:       p5     
+
+Mean                    6.44817e-002 Standard deviation      1.19459e-002
+Minimum                 3.86387e-002 Skewness                0.56278     
+Maximum                 0.10990      Kurtosis                3.29883     
+Valid observations       900
+
+
+set v5=beta[1]*ic5 + beta[2]*oc5 
+set v6=beta[1]*(ic3+200) + beta[2]*oc3*(.75) + beta[5]
+
+set denom=exp(v1)+exp(v2)+exp(v3)+exp(v4)+exp(v5)+exp(v6)
+
+set p1=exp(v1)/denom
+set p2=exp(v2)/denom
+set p3=exp(v3)/denom
+set p4=exp(v4)/denom
+set p5=exp(v5)/denom
+set p6=exp(v6)/denom
+
+cova var[p1 p2 p3 p4 p5 p6]
+
+Variable:       p1     
+
+Mean                    0.57146      Standard deviation      5.69204e-002
+Minimum                 0.38385      Skewness               -0.19884     
+Maximum                 0.75354      Kurtosis                2.89811     
+Valid observations       900
+
+Variable:       p2     
+
+Mean                    0.12853      Standard deviation      2.21777e-002
+Minimum                 7.06008e-002 Skewness                0.45370     
+Maximum                 0.20717      Kurtosis                3.13404     
+Valid observations       900
+
+Variable:       p3     
+
+Mean                    6.31116e-002 Standard deviation      2.18397e-002
+Minimum                 2.01187e-002 Skewness                0.84865     
+Maximum                 0.17051      Kurtosis                4.18727     
+Valid observations       900
+
+Variable:       p4     
+
+Mean                    8.34737e-002 Standard deviation      2.93429e-002
+Minimum                 2.32540e-002 Skewness                1.12165     
+Maximum                 0.24643      Kurtosis                5.69694     
+Valid observations       900
+
+Variable:       p5     
+
+Mean                    4.97901e-002 Standard deviation      9.82386e-003
+Minimum                 2.85366e-002 Skewness                0.64415     
+Maximum                 8.90360e-002 Kurtosis                3.53481     
+Valid observations       900
+
+Variable:       p6     
+
+Mean                    0.10364      Standard deviation      2.41740e-002
+Minimum                 4.86023e-002 Skewness                0.44535     
+Maximum                 0.19901      Kurtosis                3.15947     
+Valid observations       900
+
+
+
+
+spool off
+

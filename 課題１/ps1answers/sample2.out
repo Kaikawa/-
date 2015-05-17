@@ -1,0 +1,316 @@
+
+SST Spool File:  sample2.out
+
+mnl dep[depvar] \
+	ivalt[ic: ic1 ic2 ic3 ic4 ic5 \
+	      oc: oc1 oc2 oc3 oc4 oc5] \
+	prob[p2 p3 p4 p5]
+
+
+********** MULTINOMIAL LOGIT **********
+Dependent variable: depvar
+
+Value        Label        Count        Percent
+    1                      573          63.67
+    2                      129          14.33
+    3                       64           7.11
+    4                       84           9.33
+    5                       50           5.56
+
+ITERATION  1:   OLD LLF =      -1.44849e+003     STEP =            1.13775     
+                NEW LLF =      -1.09535e+003     GRAD*DIREC =      6.80959e+002
+
+ITERATION  2:   OLD LLF =      -1.09535e+003     STEP =            0.98967     
+                NEW LLF =      -1.09524e+003     GRAD*DIREC =      0.21332     
+
+At convergence grad * dir =       4.33812e-007
+
+
+Independent        Estimated             Standard                 t-
+ Variable         Coefficient             Error               Statistic
+
+       ic          -6.23181e-003          3.52771e-004        -17.66529     
+       oc          -4.57988e-003          3.22157e-004        -14.21629     
+
+auxiliary statistics              at convergence      initial
+log likelihood                      -1095.2          -1448.5 
+number of observations                  900
+percent correctly predicted          59.111
+
+set p1=1-p2-p3-p4-p5
+cova var[p1 p2 p3 p4 p5]
+
+Variable:       p1     
+
+Mean                    0.51695      Standard deviation      0.11991     
+Minimum                 0.21415      Skewness               -2.55809e-002
+Maximum                 0.88844      Kurtosis                2.46927     
+Valid observations       900
+
+Variable:       p2     
+
+Mean                    0.24031      Standard deviation      9.63399e-002
+Minimum                 3.92557e-002 Skewness                0.54242     
+Maximum                 0.59265      Kurtosis                2.86138     
+Valid observations       900
+
+Variable:       p3     
+
+Mean                    0.10414      Standard deviation      5.18498e-002
+Minimum                 2.08648e-002 Skewness                1.16819     
+Maximum                 0.38053      Kurtosis                4.94327     
+Valid observations       900
+
+Variable:       p4     
+
+Mean                    5.14172e-002 Standard deviation      3.42658e-002
+Minimum                 4.56894e-003 Skewness                1.88094     
+Maximum                 0.27703      Kurtosis                8.14993     
+Valid observations       900
+
+Variable:       p5     
+
+Mean                    8.71902e-002 Standard deviation      5.01102e-002
+Minimum                 1.49600e-002 Skewness                1.96991     
+Maximum                 0.53065      Kurtosis               11.64511     
+Valid observations       900
+
+
+set lcc1=ic1 + (1/.12)*oc1
+set lcc2=ic2 + (1/.12)*oc2
+set lcc3=ic3 + (1/.12)*oc3
+set lcc4=ic4 + (1/.12)*oc4
+set lcc5=ic5 + (1/.12)*oc5
+
+mnl dep[depvar] \
+	ivalt[lcc: lcc1 lcc2 lcc3 lcc4 lcc5 ] 
+
+
+********** MULTINOMIAL LOGIT **********
+Dependent variable: depvar
+
+Value        Label        Count        Percent
+    1                      573          63.67
+    2                      129          14.33
+    3                       64           7.11
+    4                       84           9.33
+    5                       50           5.56
+
+ITERATION  1:   OLD LLF =      -1.44849e+003     STEP =            1.34874     
+                NEW LLF =      -1.24870e+003     GRAD*DIREC =      3.40412e+002
+
+At convergence grad * dir =       2.57298e-004
+
+
+Independent        Estimated             Standard                 t-
+ Variable         Coefficient             Error               Statistic
+
+      lcc          -7.15167e-004          4.27381e-005        -16.73370     
+
+auxiliary statistics              at convergence      initial
+log likelihood                      -1248.7          -1448.5 
+number of observations                  900
+percent correctly predicted          40.556
+
+
+set zero=0
+set one=1
+
+mnl dep[depvar] \
+    ivalt [ ic: ic1 ic2 ic3 ic4 ic5 \
+            oc: oc1 oc2 oc3 oc4 oc5 \
+            c1: one zero zero zero zero \
+            c2: zero one zero zero zero \
+            c3: zero zero one zero zero \
+            c4: zero zero zero one zero ] \
+     prob[p2 p3 p4 p5]
+
+
+********** MULTINOMIAL LOGIT **********
+Dependent variable: depvar
+
+Value        Label        Count        Percent
+    1                      573          63.67
+    2                      129          14.33
+    3                       64           7.11
+    4                       84           9.33
+    5                       50           5.56
+
+ITERATION  1:   OLD LLF =      -1.44849e+003     STEP =            0.74922     
+                NEW LLF =      -1.02212e+003     GRAD*DIREC =      1.10875e+003
+
+ITERATION  2:   OLD LLF =      -1.02212e+003     STEP =            0.93640     
+                NEW LLF =      -1.00839e+003     GRAD*DIREC =     28.68946     
+
+ITERATION  3:   OLD LLF =      -1.00839e+003     STEP =            1.01246     
+                NEW LLF =      -1.00823e+003     GRAD*DIREC =      0.32561     
+
+At convergence grad * dir =       1.04724e-005
+
+
+Independent        Estimated             Standard                 t-
+ Variable         Coefficient             Error               Statistic
+
+       ic          -1.53281e-003          6.20857e-004         -2.46886     
+       oc          -6.99672e-003          1.55411e-003         -4.50207     
+       c1           1.71074               0.22673               7.54530     
+       c2           0.30777               0.20658               1.48983     
+       c3           1.65861               0.44842               3.69879     
+       c4           1.85315               0.36195               5.11991     
+
+auxiliary statistics              at convergence      initial
+log likelihood                      -1008.2          -1448.5 
+number of observations                  900
+percent correctly predicted          63.667
+
+
+set p1=1-p2-p3-p4-p5
+cova var[p1 p2 p3 p4 p5]
+
+Variable:       p1     
+
+Mean                    0.63668      Standard deviation      5.18230e-002
+Minimum                 0.44031      Skewness               -0.27663     
+Maximum                 0.79204      Kurtosis                2.96429     
+Valid observations       900
+
+Variable:       p2     
+
+Mean                    0.14331      Standard deviation      2.38976e-002
+Minimum                 7.79499e-002 Skewness                0.40907     
+Maximum                 0.22512      Kurtosis                3.03415     
+Valid observations       900
+
+Variable:       p3     
+
+Mean                    7.11068e-002 Standard deviation      2.67599e-002
+Minimum                 2.11559e-002 Skewness                1.00105     
+Maximum                 0.21287      Kurtosis                4.70338     
+Valid observations       900
+
+Variable:       p4     
+
+Mean                    9.33299e-002 Standard deviation      3.32448e-002
+Minimum                 2.55508e-002 Skewness                1.10581     
+Maximum                 0.28268      Kurtosis                5.60933     
+Valid observations       900
+
+Variable:       p5     
+
+Mean                    5.55743e-002 Standard deviation      1.09931e-002
+Minimum                 3.19038e-002 Skewness                0.62313     
+Maximum                 9.93483e-002 Kurtosis                3.45074     
+Valid observations       900
+
+
+set ici1=ic1 / income
+set ici2=ic2 / income
+set ici3=ic3 / income
+set ici4=ic4 / income
+set ici5=ic5 / income
+
+mnl dep[depvar] \
+    ivalt [ ici: ici1 ici2 ici3 ici4 ici5 \
+            oc: oc1 oc2 oc3 oc4 oc5 \
+            c1: one zero zero zero zero \
+            c2: zero one zero zero zero \
+            c3: zero zero one zero zero \
+            c4: zero zero zero one zero ] 
+
+
+********** MULTINOMIAL LOGIT **********
+Dependent variable: depvar
+
+Value        Label        Count        Percent
+    1                      573          63.67
+    2                      129          14.33
+    3                       64           7.11
+    4                       84           9.33
+    5                       50           5.56
+
+ITERATION  1:   OLD LLF =      -1.44849e+003     STEP =            0.74740     
+                NEW LLF =      -1.02367e+003     GRAD*DIREC =      1.10593e+003
+
+ITERATION  2:   OLD LLF =      -1.02367e+003     STEP =            0.93923     
+                NEW LLF =      -1.01036e+003     GRAD*DIREC =     27.74446     
+
+ITERATION  3:   OLD LLF =      -1.01036e+003     STEP =            1.01234     
+                NEW LLF =      -1.01020e+003     GRAD*DIREC =      0.32573     
+
+At convergence grad * dir =       9.93084e-006
+
+
+Independent        Estimated             Standard                 t-
+ Variable         Coefficient             Error               Statistic
+
+      ici         -27.64894              18.94350              -1.45955     
+       oc          -7.10689e-003          1.55180e-003         -4.57976     
+       c1           1.92616               0.20339               9.47045     
+       c2           0.40428               0.20116               2.00976     
+       c3           1.86981               0.43642               4.28440     
+       c4           1.93378               0.35999               5.37170     
+
+auxiliary statistics              at convergence      initial
+log likelihood                      -1010.2          -1448.5 
+number of observations                  900
+percent correctly predicted          63.667
+
+
+mnl dep[depvar] \
+    ivalt [ ic: ic1 ic2 ic3 ic4 ic5 \
+            oc: oc1 oc2 oc3 oc4 oc5 \
+            c1: one zero zero zero zero \
+            c2: zero one zero zero zero \
+            c3: zero zero one zero zero \
+            c4: zero zero zero one zero \
+            i1: income zero zero zero zero \
+            i2: zero income zero zero zero \
+            i3: zero zero income zero zero \
+            i4: zero zero zero income zero ]
+
+
+********** MULTINOMIAL LOGIT **********
+Dependent variable: depvar
+
+Value        Label        Count        Percent
+    1                      573          63.67
+    2                      129          14.33
+    3                       64           7.11
+    4                       84           9.33
+    5                       50           5.56
+
+ITERATION  1:   OLD LLF =      -1.44849e+003     STEP =            0.75126     
+                NEW LLF =      -1.02031e+003     GRAD*DIREC =      1.11238e+003
+
+ITERATION  2:   OLD LLF =      -1.02031e+003     STEP =            0.94015     
+                NEW LLF =      -1.00611e+003     GRAD*DIREC =     29.60453     
+
+ITERATION  3:   OLD LLF =      -1.00611e+003     STEP =            1.02209     
+                NEW LLF =      -1.00589e+003     GRAD*DIREC =      0.43289     
+
+At convergence grad * dir =       1.17366e-004
+
+
+Independent        Estimated             Standard                 t-
+ Variable         Coefficient             Error               Statistic
+
+       ic          -1.53524e-003          6.22531e-004         -2.46612     
+       oc          -6.96348e-003          1.55398e-003         -4.48106     
+       c1           2.05169               0.48611               4.22062     
+       c2           1.13698               0.51805               2.19472     
+       c3           1.95099               0.70340               2.77367     
+       c4           2.30250               0.62370               3.69167     
+       i1          -7.12026e-006          8.87515e-006         -0.80227     
+       i2          -1.79115e-005          1.00100e-005         -1.78936     
+       i3          -6.29217e-006          1.13279e-005         -0.55546     
+       i4          -9.62187e-006          1.07527e-005         -0.89483     
+
+auxiliary statistics              at convergence      initial
+log likelihood                      -1005.9          -1448.5 
+number of observations                  900
+percent correctly predicted          63.667
+
+
+
+spool off
+

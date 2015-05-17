@@ -1,0 +1,87 @@
+
+SST Spool File:  sample.out
+
+set pb1 = ic1/oc1
+set pb2 = ic2/oc2
+set pb3 = ic3/oc3
+set pb4 = ic4/oc4
+set pb5 = ic5/oc5
+
+mnl dep[depvar] \
+	ivalt[ic: ic1 ic2 ic3 ic4 ic5 \
+	      pb: pb1 pb2 pb3 pb4 pb5] \
+	prob[p2 p3 p4 p5]
+
+
+********** MULTINOMIAL LOGIT **********
+Dependent variable: depvar
+
+Value        Label        Count        Percent
+    1                      573          63.67
+    2                      129          14.33
+    3                       64           7.11
+    4                       84           9.33
+    5                       50           5.56
+
+ITERATION  1:   OLD LLF =      -1.44849e+003     STEP =            1.21844     
+                NEW LLF =      -1.12934e+003     GRAD*DIREC =      5.83278e+002
+
+ITERATION  2:   OLD LLF =      -1.12934e+003     STEP =            0.99561     
+                NEW LLF =      -1.12922e+003     GRAD*DIREC =      0.23963     
+
+At convergence grad * dir =       5.35407e-006
+
+
+Independent        Estimated             Standard                 t-
+ Variable         Coefficient             Error               Statistic
+
+       ic          -7.81296e-003          3.77718e-004        -20.68461     
+       pb           0.32588               2.46191e-002         13.23688     
+
+auxiliary statistics              at convergence      initial
+log likelihood                      -1129.2          -1448.5 
+number of observations                  900
+percent correctly predicted          56.556
+
+
+set p1=1-p2-p3-p4-p5
+cova var[p1 p2 p3 p4 p5]
+
+Variable:       p1     
+
+Mean                    0.47501      Standard deviation      0.11680     
+Minimum                 0.19913      Skewness                9.44210e-002
+Maximum                 0.86954      Kurtosis                2.51509     
+Valid observations       900
+
+Variable:       p2     
+
+Mean                    0.25836      Standard deviation      0.10001     
+Minimum                 3.99374e-002 Skewness                0.49484     
+Maximum                 0.59166      Kurtosis                2.83747     
+Valid observations       900
+
+Variable:       p3     
+
+Mean                    0.14162      Standard deviation      6.68175e-002
+Minimum                 2.90233e-002 Skewness                1.05697     
+Maximum                 0.46531      Kurtosis                4.47606     
+Valid observations       900
+
+Variable:       p4     
+
+Mean                    5.34417e-002 Standard deviation      3.65049e-002
+Minimum                 5.45284e-003 Skewness                2.14976     
+Maximum                 0.29342      Kurtosis               10.20097     
+Valid observations       900
+
+Variable:       p5     
+
+Mean                    7.15687e-002 Standard deviation      4.40887e-002
+Minimum                 1.09072e-002 Skewness                2.22855     
+Maximum                 0.48696      Kurtosis               13.91409     
+Valid observations       900
+
+
+spool off
+

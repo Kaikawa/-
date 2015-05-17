@@ -1,0 +1,52 @@
+Standard logit of heating system choice of 900 houses, with explanatory vars: installation cost and operating cost.
+Checking the data and specifications.
+Inputs have been checked and look fine.
+Start estimation
+The negative of the log-likelihood is minimized,
+which is the same as maximizing the log-likelihood.
+                                                        First-order 
+ Iteration  Func-count       f(x)        Step-size       optimality
+     0           3          1448.49                           723
+     1           6          1229.19     0.00138343            292  
+     2           9          1120.64              1            164  
+     3          12          1108.38              1            147  
+     4          15          1095.69              1           27.2  
+     5          18          1095.24              1           3.72  
+     6          21          1095.24              1          0.182  
+     7          24          1095.24              1         0.0284  
+     8          27          1095.24              1       0.000229  
+Optimization terminated: relative infinity-norm of gradient less than options.TolFun.
+
+Computing finite-difference Hessian using user-supplied objective function.
+ 
+Estimation took 0.088674 minutes.
+ 
+Convergence achieved.
+Value of the log-likelihood function at convergence: -1095.2371
+Taking inverse of hessian for standard errors.
+The value of grad*inv(hessian)*grad is: 5.4698e-011
+ 
+ESTIMATION RESULTS
+ 
+              ---------------------------- 
+                Est         SE      t-stat
+ic            -0.6232     0.0353   -17.6640
+oc            -0.4580     0.0322   -14.2149
+ 
+ 
+You can access the estimated parameters as variable paramhat,
+the gradient of the negative of the log-likelihood function as variable grad,
+the hessian of the negative of the log-likelihood function as variable hessian,
+and the inverse of the hessian as variable ihess.
+The hessian is calculated by the BFGS updating procedure.
+ 
+Predict shares at estimated coefficients.
+Actual and predicted shares
+     Alt      Actual    Predicted
+    1.0000    0.6367    0.5170
+    2.0000    0.1433    0.2403
+    3.0000    0.0711    0.1041
+    4.0000    0.0933    0.0514
+    5.0000    0.0556    0.0872
+
+Predicted probabilities are held in vector probs, which has size NROWSx1.
