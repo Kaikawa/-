@@ -55,7 +55,9 @@ NROWS=900*5;
 % The remaining columns of XMAT can be any variables.
 
 XMAT=load('datalong.asc');  %The variables are described below
-XMAT(:,4:5)=XMAT(:,4:5)./100; %To scale: costs in hundreds of dollars
+XMAT(:,4:5:6)=XMAT(:,4:5:6)./100; %To scale: costs in hundreds of dollars
+newvar=XMAT(:,4)/XMAT(:,6);
+XMAT=[XMAT newvar];
 
 % 1. idcase: gives the observation number (1-900)
 % 2. idalt: gives the alternative number (1-5)
@@ -72,11 +74,11 @@ XMAT(:,4:5)=XMAT(:,4:5)./100; %To scale: costs in hundreds of dollars
 
 %Identify the columns of XMAT that you want to enter as explanatory variables in the model.
 
-IDV=[4 5];
+IDV=[13 5];
 
 %Give names to the variables. Put the names in single quotes.'}
 
-NAMES={'ic' 'oc' };
+NAMES={'newvar' 'oc' };
 
 %Gives starting values for the coefficients of these variables.
 
