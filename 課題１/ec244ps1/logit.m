@@ -55,9 +55,19 @@ NROWS=900*5;
 % The remaining columns of XMAT can be any variables.
 
 XMAT=load('datalong.asc');  %The variables are described below
-XMAT(:,4:5:6)=XMAT(:,4:5:6)./100; %To scale: costs in hundreds of dollars
-newvar=XMAT(:,4)/XMAT(:,6);
-XMAT=[XMAT newvar];
+XMAT(:,4:5)=XMAT(:,4:5)./100; %To scale: costs in hundreds of dollars
+newic=XMAT(:,4)-XMAT(:,4).*(XMAT(:,2)==5)./10;
+alt1=(XMAT(:,2)==1);
+alt2=(XMAT(:,2)==2);
+alt3=(XMAT(:,2)==3);
+alt4=(XMAT(:,2)==4);
+
+XMAT=[XMAT alt1];
+XMAT=[XMAT alt2];
+XMAT=[XMAT alt3];
+XMAT=[XMAT alt4];
+XMAT=[XMAT newic];
+
 
 % 1. idcase: gives the observation number (1-900)
 % 2. idalt: gives the alternative number (1-5)
@@ -74,15 +84,15 @@ XMAT=[XMAT newvar];
 
 %Identify the columns of XMAT that you want to enter as explanatory variables in the model.
 
-IDV=[13 5];
+IDV=[17 5 13 14 15 16];
 
 %Give names to the variables. Put the names in single quotes.'}
 
-NAMES={'newvar' 'oc' };
+NAMES={'newic' 'oc' 'alt1' 'alt2' 'alt3' 'alt4'};
 
 %Gives starting values for the coefficients of these variables.
 
-B=[0 0 ];
+B=[-0.1533 -0.6996 1.7110 0.3083 1.6588 1.8534];
 
 %Do you want to predict probabilities and aggregate shares for each alternative?
 %Predicted shares are given for each unique value (ie alternative number) in the second column of XMAT.
@@ -91,7 +101,7 @@ B=[0 0 ];
 %    PREDICT=1 to estimate the model and then predict at the estimated coefficients
 %    PREDICT=2 to predict at the starting values B and not estimate
 
-PREDICT=1;
+PREDICT=2;
 
 % OPTIMIZATION 
 % Maximum number of iterations for the optimization routine.
