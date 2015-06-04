@@ -1,0 +1,63 @@
+new , 10000;
+screen on;
+output file=ktout1.txt reset;
+nobs = 900;
+nalt = 5;
+load dat[900,19]=data1.asc;
+
+depid=dat[.,2];  @gives number of chosen alt@
+@create nobs x nalt matrix identifying chosen alt with 1, otherwise 0@
+depm=zeros(nobs,nalt);
+n=1;
+do while n .le nobs;
+  j=1;
+  do while j .le nalt;
+  if depid[n,1] .eq j; depm[n,j]=1; endif;
+  j=j+1;
+  endo;
+n=n+1;
+endo;
+
+var1=dat[.,3:7] ./ 100;  @installation cost, in hundreds of dollars.@
+var2=dat[.,8:12] ./ 100; @operating cost, in hundreds of dollars.@
+@create matrix of explanatory variables@
+@ with nobs*nalt rows and one column for each variable@
+z=zeros(NOBS,1);
+one=ones(NOBS,1);
+c1=one~z~z~z~z;
+c2=z~one~z~z~z;
+c3=z~z~one~z~z;
+c4=z~z~z~one~z;
+var1=reshape(var1,nobs*nalt,1);
+var2=reshape(var2,nobs*nalt,1);
+c1=reshape(c1,nobs*nalt,1);
+c2=reshape(c2,nobs*nalt,1);
+c3=reshape(c3,nobs*nalt,1);
+c4=reshape(c4,nobs*nalt,1);
+
+vars=var1~var2~c1~c2~c3~c4;
+
+b={0,0,0,0,0,0}; @starting values@
+xmat=ones(nobs,1); @to use in maxlik@
+library maxlik,pgraph;
+#include maxlik.ext;
+maxset;
+_max_GradTol=0.001;
+_max_MaxIters=50;
+_max_Algorithm=2; 
+{beta,f,g,cov,ret}=maxlik(xmat,0,&ll,b);
+call maxprt(beta,f,g,cov,ret);
+
+
+/*Log-Likelihood routine*/
+proc ll(b,x);
+@uses globals vars,depm,nobs,nalt@
+local ev, p;
+ev=exp(vars * b);
+ev=reshape(ev,nobs,nalt);
+p=sumc((ev .* depm)') ./ sumc(ev');
+retp(ln(p));
+endp;
+
+
+

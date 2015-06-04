@@ -1,0 +1,49 @@
+Iteration number       0.0000000 
+Parameters are:                       0.0000000        0.0000000 
+Gradient is:                         -722.84180       -683.64152 
+Diagonal of hessian-inverse is:   0.00089680405    0.00096144607 
+Step-size from prior iteration:       0.0000000 
+Convergence statistic is:             415.97075 
+Log-likelihood is                    -1448.4941 
+
+Iteration number       1.0000000 
+Parameters are:                     -0.30103694      -0.29016475 
+Gradient is:                         -329.90495       -215.02251 
+Diagonal of hessian-inverse is:    0.0010915312     0.0011738770 
+Step-size from prior iteration:       1.0000000 
+Convergence statistic is:             120.42040 
+Log-likelihood is                    -1162.1217 
+
+Iteration number       2.0000000 
+Parameters are:                     -0.58133866      -0.42013939 
+Gradient is:                         -36.701576       -40.189100 
+Diagonal of hessian-inverse is:    0.0011961463     0.0011884914 
+Step-size from prior iteration:       1.0000000 
+Convergence statistic is:             2.6085587 
+Log-likelihood is                    -1096.7473 
+
+Iteration number       3.0000000 
+Parameters are:                     -0.61267473      -0.45642971 
+Gradient is:                         -8.6052432       -2.0313281 
+Diagonal of hessian-inverse is:    0.0011968607     0.0011921868 
+Step-size from prior iteration:       1.0000000 
+Convergence statistic is:           0.082635457 
+Log-likelihood is                    -1095.2839 
+
+Iteration number       4.0000000 
+Parameters are:                     -0.62233999      -0.45616560 
+Gradient is:                        -0.76984799       -1.8237064 
+Diagonal of hessian-inverse is:    0.0011959150     0.0011911349 
+Step-size from prior iteration:       1.0000000 
+Convergence statistic is:          0.0037965172 
+Log-likelihood is                    -1095.2391 
+
+***************************
+Convergence achieved.
+Estimates are:            -0.62269311      -0.45809829 
+Standard errors are:      0.034583548      0.034516535 
+Convergence statistic is:    0.00020596335 
+Log-likelihood is:              -1095.2372 
+***************************
+Currently active call: bhhh [59]
+

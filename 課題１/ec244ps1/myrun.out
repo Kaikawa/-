@@ -1,0 +1,14 @@
+Standard logit of heating system choice of 900 houses, with explanatory vars: installation cost and operating cost.
+Checking the data and specifications.
+Inputs have been checked and look fine.
+Predict shares at starting values B.
+Actual and predicted shares
+     Alt      Actual    Predicted
+    1.0000    0.6367    0.6306
+    2.0000    0.1433    0.1420
+    3.0000    0.0711    0.0705
+    4.0000    0.0933    0.0925
+    5.0000    0.0556    0.0645
+
+Predicted probabilities are held in vector probs, which has size NROWSx1.
+Since PREDICT=2, no estimation is done.

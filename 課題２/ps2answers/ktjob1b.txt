@@ -1,0 +1,76 @@
+new , 10000;
+screen on;
+output file=ktout1b.txt reset;
+nobs = 900;
+nalt = 5;
+load dat[900,19]=data1.asc;
+
+depid=dat[.,2];  @gives number of chosen alt@
+@create nobs x nalt matrix identifying chosen alt with 1, otherwise 0@
+depm=zeros(nobs,nalt);
+n=1;
+do while n .le nobs;
+  j=1;
+  do while j .le nalt;
+  if depid[n,1] .eq j; depm[n,j]=1; endif;
+  j=j+1;
+  endo;
+n=n+1;
+endo;
+
+var1=dat[.,3:7] ./ 100;  @installation cost, in hundreds of dollars.@
+var2=dat[.,8:12] ./ 100; @operating cost, in hundreds of dollars.@
+@create matrix of explanatory variables@
+@ with nobs*nalt rows and one column for each variable@
+z=zeros(NOBS,1);
+one=ones(NOBS,1);
+var1=reshape(var1,nobs*nalt,1);
+var2=reshape(var2,nobs*nalt,1);
+
+vars=var1~var2;
+
+@Set CONST=1 to get alt-spec constants, else set CONST=0;@
+CONST=1;
+
+@Define gg to identify a group with a different scale factor.@
+gg=(dat[.,18] .eq 1) .or (dat[.,19] .eq 1);
+
+b={0,0,0,0,0,0,1}; @starting values, including constants if CONST=1@
+xmat=ones(nobs,1); @to use in maxlik@
+library maxlik,pgraph;
+#include maxlik.ext;
+maxset;
+_max_GradTol=0.001;
+_max_MaxIters=50;
+_max_Algorithm=2; 
+{beta,f,g,cov,ret}=maxlik(xmat,0,&ll,b);
+call maxprt(beta,f,g,cov,ret);
+
+
+/*Log-Likelihood routine*/
+proc ll(b,x);
+@uses globals vars,depm,nobs,nalt@
+local ev, p, bb, c, k, m;
+bb=b;
+if CONST .eq 1;
+  bb=b[1:(rows(b)-(NALT-1)-1),1];
+  c=b[(rows(b)-(NALT-1)):(rows(b)-1),1];
+  m=b[rows(b),1];
+endif;
+ev=exp(vars * bb);
+ev=reshape(ev,nobs,nalt);
+if CONST .eq 1;
+  k=1;
+  do while k .lt NALT;
+  ev[.,k]=ev[.,k] .* exp(c[k,1]);
+  k=k+1;
+  endo;
+endif;
+m=(m .* gg) + (1-gg);
+ev=ev .^ m;
+p=sumc((ev .* depm)') ./ sumc(ev');
+retp(ln(p));
+endp;
+
+
+

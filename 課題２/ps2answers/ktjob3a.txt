@@ -1,0 +1,104 @@
+new , 10000;
+screen on;
+output file=ktout3a.txt reset;
+nobs = 900;
+nalt = 5;
+load dat[900,19]=data1.asc;
+
+depid=dat[.,2];  @gives number of chosen alt@
+@create nobs x nalt matrix identifying chosen alt with 1, otherwise 0@
+depm=zeros(nobs,nalt);
+n=1;
+do while n .le nobs;
+  j=1;
+  do while j .le nalt;
+  if depid[n,1] .eq j; depm[n,j]=1; endif;
+  j=j+1;
+  endo;
+n=n+1;
+endo;
+
+var1=dat[.,3:7] ./ 100;  @installation cost, in hundreds of dollars.@
+var2=dat[.,8:12] ./ 100; @operating cost, in hundreds of dollars.@
+@create matrix of explanatory variables@
+@ with nobs*nalt rows and one column for each variable@
+var1=reshape(var1,nobs*nalt,1);
+var2=reshape(var2,nobs*nalt,1);
+vars=var1~var2;
+nvars=cols(vars);
+
+b={0,0}; @starting values@
+maxiter=100; @Maximum number of iterations allowed.@
+eps=0.001;    @Convergence criterion for gradient*hessian-inv*gradient@
+bhhh(b);
+
+/*Bhhh maximization routine.*/
+/* Note that ll and grad proc do not take x as input, since not needed.*/
+/* Uses globals maxiter, eps */
+proc bhhh(b);
+local b1, b2, l1, l2, it, g, h, c, d, s, t, est;
+b2=b;
+l2=sumc(ll(b2));
+it=0;
+s=0;
+do while it .le maxiter;
+   b1=b2;
+   l1=l2;
+   g=gr(b1);
+   h=inv(g'*g);
+   g=sumc(g);
+   c=g'*h*g;
+   if c .le eps;
+      print "***************************";
+      print "Convergence achieved.";
+      print "Estimates are:       " b1';
+      print "Standard errors are: " (sqrt(diag(h))');
+      print "Convergence statistic is: " c;
+      print "Log-likelihood is:        " l1;
+      print "***************************";
+      end;
+   endif;
+   print "Iteration number" it;
+   print "Parameters are:                " b2';
+   print "Gradient is:                   " g';
+   print "Diagonal of hessian-inverse is:" diag(h)';
+   print "Step-size from prior iteration:" s;
+   print "Convergence statistic is:      " c;
+   print "Log-likelihood is              " l1;
+   print;
+   d=h*g;
+   s=1;
+   t=1;
+   do while t .eq 1;
+      b2=b1+s.*d;
+      l2=sumc(ll(b2));
+      if l2 .gt l1; t=2; endif;
+      if l2 .le l1; s = s ./ 2; endif;
+      if s .le .01;
+          print "Failed to find increase.";
+          end; endif;
+   endo;
+   it=it+1;
+endo;
+print "Maximum iterations reached without convergence.";
+endp;
+
+/*Log-Likelihood routine*/
+proc ll(b);
+@uses globals vars,depm,nobs,nalt@
+local ev, p;
+ev=exp(vars * b);
+ev=reshape(ev,nobs,nalt);
+p=sumc((ev .* depm)') ./ sumc(ev');
+retp(ln(p));
+endp;
+
+/*Gradient routine*/
+proc gr(b);
+@uses globals vars,depm,nobs,nalt,nvars@
+local g;
+g=gradp(&ll,b);
+retp(g);
+endp;
+
+
