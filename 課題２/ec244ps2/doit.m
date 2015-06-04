@@ -2,13 +2,30 @@
 % Written by Kenneth Train, Dec 11, 2007
 
 ok=check;  %Check the data
+
 if ok == 1;
     disp('Inputs have been checked and look fine.');
+    disp('‚í‚Á‚µ‚å‚¢‚í‚Á‚µ‚å‚¢‚í‚Á‚µ‚å‚¢');
 else
     return;
 end
 
 VARS=XMAT(:,IDV);
+
+if OPTION==1
+alt1=(XMAT(:,2)==1);
+alt2=(XMAT(:,2)==2);
+alt3=(XMAT(:,2)==3);
+alt4=(XMAT(:,2)==4);
+
+VARS=[VARS alt1];
+VARS=[VARS alt2];
+VARS=[VARS alt3];
+VARS=[VARS alt4];
+
+B=[0 0 0 0 0 0];
+end;
+
 IDCASE=XMAT(:,1);
 if PREDICT > 0;
     IDALT=XMAT(:,2);
@@ -69,7 +86,7 @@ disp(['Value of the log-likelihood function at convergence: ' num2str(-fval)]);
 
 %Calculate standard errors of parameters
 disp('Taking inverse of hessian for standard errors.');
-ihess=inv(hessian);
+ihess=inv(hessian)/NCS;
 stderr=sqrt(diag(ihess));
 disp(['The value of grad*inv(hessian)*grad is: ' num2str(grad'*ihess*grad)]);
 

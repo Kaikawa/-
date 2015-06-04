@@ -12,7 +12,6 @@
 function ll=loglik(coef);
 
 global NCS IDCASE IDDEP VARS
-
 p=zeros(NCS,1);
 v=VARS*coef;
 
@@ -25,6 +24,6 @@ end
 
 p=max(p,0.00000001); %As a precaution
 
-ll=-sum(log(p),1);  %Negative since neg of ll is minimized
+ll=-sum(log(p),1)/NCS;  %Negative since neg of ll is minimized
 
 

@@ -7,7 +7,7 @@ clear all
 % GLOBAL variables are all in caps
 % DO NOT CHANGE ANY OF THESE 'global' STATEMENTS
 global NCS NROWS XMAT
-global IDV NAMES B PREDICT
+global IDV NAMES B PREDICT OPTION
 global MAXITERS PARAMTOL LLTOL
 global VARS IDCASE IDDEP IDALT
 
@@ -90,6 +90,8 @@ B=[0 0 ];
 %    PREDICT=2 to predict at the starting values B and not estimate
 
 PREDICT=1;
+OPTION=1;
+
 
 % OPTIMIZATION 
 % Maximum number of iterations for the optimization routine.
