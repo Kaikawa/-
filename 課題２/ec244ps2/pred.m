@@ -17,7 +17,7 @@ function probs=pred(coef);
 global NCS IDCASE IDALT IDDEP VARS
 
 probs=zeros(size(VARS,1),1);
-v=exp(VARS*coef);
+v=exp(VARS*coef(1:2,:));
 for n=1:NCS;
    vv=v(IDCASE==n,1);
    denom=sum(vv);

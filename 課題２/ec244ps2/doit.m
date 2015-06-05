@@ -44,7 +44,7 @@ disp('Start estimation');
 disp('The negative of the log-likelihood is minimized,');
 disp('which is the same as maximizing the log-likelihood.');
 tic;
-param=B';  %starting values: take transpose since must be col vector
+param=[0 0 1]';  %starting values: take transpose since must be col vector
 options=optimset('LargeScale','off','Display','iter','GradObj','off',...
     'MaxFunEvals',10000,'MaxIter',MAXITERS,'TolX',PARAMTOL,'TolFun',LLTOL,'DerivativeCheck','off');
 [paramhat,fval,exitflag,output,grad,hessian]=fminunc(@loglik,param,options);
@@ -86,7 +86,7 @@ disp(['Value of the log-likelihood function at convergence: ' num2str(-fval)]);
 
 %Calculate standard errors of parameters
 disp('Taking inverse of hessian for standard errors.');
-ihess=inv(hessian)/NCS;
+ihess=inv(hessian);
 stderr=sqrt(diag(ihess));
 disp(['The value of grad*inv(hessian)*grad is: ' num2str(grad'*ihess*grad)]);
 

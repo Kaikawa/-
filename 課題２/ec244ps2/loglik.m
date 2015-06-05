@@ -11,12 +11,18 @@
 
 function ll=loglik(coef);
 
-global NCS IDCASE IDDEP VARS
+global NCS IDCASE IDDEP VARS XMAT
 p=zeros(NCS,1);
-v=VARS*coef;
+v=VARS*coef(1:2,:);
+mt=XMAT(:,11);
+vl=XMAT(:,12);
 
 for n=1:NCS
+  if mt(IDCASE==n,1)==1 | vl(IDCASE==n,1)==1
+  vv=v(IDCASE==n,1)*coef(3,1);
+  else
   vv=v(IDCASE==n,1);
+  end
   vy=v(IDCASE==n & IDDEP==1,1);
   vv=vv-repmat(vy,size(vv,1),1);
   p(n,1)=1/sum(exp(vv));
@@ -24,6 +30,6 @@ end
 
 p=max(p,0.00000001); %As a precaution
 
-ll=-sum(log(p),1)/NCS;  %Negative since neg of ll is minimized
+ll=-sum(log(p),1);  %Negative since neg of ll is minimized
 
 
