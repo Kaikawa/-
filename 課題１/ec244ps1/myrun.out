@@ -12,3 +12,67 @@ Actual and predicted shares
 
 Predicted probabilities are held in vector probs, which has size NROWSx1.
 Since PREDICT=2, no estimation is done.
+loglik([0;0])
+{エラー: <a href="matlab:matlab.internal.language.introspective.errorDocCallback('mtimes')" style="font-weight:bold"> * </a>
+内部行列の次元は一致しなければなりません。
+
+エラー: <a href="matlab:matlab.internal.language.introspective.errorDocCallback('loglik', 'C:\Users\aikawa\higuchilab\Econometrics\課題１\ec244ps1\loglik.m', 17)" style="font-weight:bold">loglik</a> (<a href="matlab: opentoline('C:\Users\aikawa\higuchilab\Econometrics\課題１\ec244ps1\loglik.m',17,0)">line 17</a>)
+v=VARS*coef;
+} 
+loglik([0;0])
+{エラー: <a href="matlab:matlab.internal.language.introspective.errorDocCallback('mtimes')" style="font-weight:bold"> * </a>
+内部行列の次元は一致しなければなりません。
+
+エラー: <a href="matlab:matlab.internal.language.introspective.errorDocCallback('loglik', 'C:\Users\aikawa\higuchilab\Econometrics\課題１\ec244ps1\loglik.m', 17)" style="font-weight:bold">loglik</a> (<a href="matlab: opentoline('C:\Users\aikawa\higuchilab\Econometrics\課題１\ec244ps1\loglik.m',17,0)">line 17</a>)
+v=VARS*coef;
+} 
+loglik([0;0])
+{エラー: <a href="matlab:matlab.internal.language.introspective.errorDocCallback('mtimes')" style="font-weight:bold"> * </a>
+内部行列の次元は一致しなければなりません。
+
+エラー: <a href="matlab:matlab.internal.language.introspective.errorDocCallback('loglik', 'C:\Users\aikawa\higuchilab\Econometrics\課題１\ec244ps1\loglik.m', 17)" style="font-weight:bold">loglik</a> (<a href="matlab: opentoline('C:\Users\aikawa\higuchilab\Econometrics\課題１\ec244ps1\loglik.m',17,0)">line 17</a>)
+v=VARS*coef;
+} 
+loglik([0;0])
+{エラー: <a href="matlab:matlab.internal.language.introspective.errorDocCallback('mtimes')" style="font-weight:bold"> * </a>
+内部行列の次元は一致しなければなりません。
+
+エラー: <a href="matlab:matlab.internal.language.introspective.errorDocCallback('loglik', 'C:\Users\aikawa\higuchilab\Econometrics\課題１\ec244ps1\loglik.m', 17)" style="font-weight:bold">loglik</a> (<a href="matlab: opentoline('C:\Users\aikawa\higuchilab\Econometrics\課題１\ec244ps1\loglik.m',17,0)">line 17</a>)
+v=VARS*coef;
+} 
+loglik([0;0])
+{エラー: <a href="matlab:matlab.internal.language.introspective.errorDocCallback('mtimes')" style="font-weight:bold"> * </a>
+内部行列の次元は一致しなければなりません。
+
+エラー: <a href="matlab:matlab.internal.language.introspective.errorDocCallback('loglik', 'C:\Users\aikawa\higuchilab\Econometrics\課題１\ec244ps1\loglik.m', 17)" style="font-weight:bold">loglik</a> (<a href="matlab: opentoline('C:\Users\aikawa\higuchilab\Econometrics\課題１\ec244ps1\loglik.m',17,0)">line 17</a>)
+v=VARS*coef;
+} 
+loglik([0;0;1])
+{エラー: <a href="matlab:matlab.internal.language.introspective.errorDocCallback('mtimes')" style="font-weight:bold"> * </a>
+内部行列の次元は一致しなければなりません。
+
+エラー: <a href="matlab:matlab.internal.language.introspective.errorDocCallback('loglik', 'C:\Users\aikawa\higuchilab\Econometrics\課題２\ec244ps2\loglik.m', 16)" style="font-weight:bold">loglik</a> (<a href="matlab: opentoline('C:\Users\aikawa\higuchilab\Econometrics\課題２\ec244ps2\loglik.m',16,0)">line 16</a>)
+v=VARS*coef(1:2,:);
+} 
+loglik([0;0;1])
+{エラー: <a href="matlab:matlab.internal.language.introspective.errorDocCallback('mtimes')" style="font-weight:bold"> * </a>
+内部行列の次元は一致しなければなりません。
+
+エラー: <a href="matlab:matlab.internal.language.introspective.errorDocCallback('loglik', 'C:\Users\aikawa\higuchilab\Econometrics\課題２\ec244ps2\loglik.m', 16)" style="font-weight:bold">loglik</a> (<a href="matlab: opentoline('C:\Users\aikawa\higuchilab\Econometrics\課題２\ec244ps2\loglik.m',16,0)">line 16</a>)
+v=VARS*coef(1:2,:);
+} 
+loglik([0;0;1])
+{エラー: <a href="matlab:matlab.internal.language.introspective.errorDocCallback('mtimes')" style="font-weight:bold"> * </a>
+内部行列の次元は一致しなければなりません。
+
+エラー: <a href="matlab:matlab.internal.language.introspective.errorDocCallback('loglik', 'C:\Users\aikawa\higuchilab\Econometrics\課題２\ec244ps2\loglik.m', 16)" style="font-weight:bold">loglik</a> (<a href="matlab: opentoline('C:\Users\aikawa\higuchilab\Econometrics\課題２\ec244ps2\loglik.m',16,0)">line 16</a>)
+v=VARS*coef(1:2,:);
+} 
+loglik([0;0;1])
+{エラー: <a href="matlab:matlab.internal.language.introspective.errorDocCallback('mtimes')" style="font-weight:bold"> * </a>
+内部行列の次元は一致しなければなりません。
+
+エラー: <a href="matlab:matlab.internal.language.introspective.errorDocCallback('loglik', 'C:\Users\aikawa\higuchilab\Econometrics\課題２\ec244ps2\loglik.m', 16)" style="font-weight:bold">loglik</a> (<a href="matlab: opentoline('C:\Users\aikawa\higuchilab\Econometrics\課題２\ec244ps2\loglik.m',16,0)">line 16</a>)
+v=VARS*coef(1:2,:);
+} 
+logit

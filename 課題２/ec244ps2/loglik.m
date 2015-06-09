@@ -14,16 +14,18 @@ function ll=loglik(coef);
 global NCS IDCASE IDDEP VARS XMAT
 p=zeros(NCS,1);
 v=VARS*coef(1:2,:);
-mt=XMAT(:,11);
-vl=XMAT(:,12);
+mt=XMAT(:,9);
+vl=XMAT(:,11);
 
 for n=1:NCS
-  if mt(IDCASE==n,1)==1 | vl(IDCASE==n,1)==1
+  if mt(n*5-4,1)==1 | vl(n*5-4,1)==1
   vv=v(IDCASE==n,1)*coef(3,1);
+  vy=v(IDCASE==n & IDDEP==1,1)*coef(3,1);
   else
   vv=v(IDCASE==n,1);
-  end
   vy=v(IDCASE==n & IDDEP==1,1);
+  end
+  
   vv=vv-repmat(vy,size(vv,1),1);
   p(n,1)=1/sum(exp(vv));
 end
