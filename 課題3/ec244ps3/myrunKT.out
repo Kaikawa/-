@@ -1,0 +1,180 @@
+Nested logit of heating and cooling system choice of 250 houses.
+Checking the data and specifications.
+Inputs have been checked and look fine.
+Start estimation
+The negative of the log-likelihood is minimized,
+which is the same as maximizing the log-likelihood.
+                                                        First-order 
+ Iteration  Func-count       f(x)        Step-size       optimality
+     0          11          486.478                     4.02e+003
+     1          44          431.685   2.10899e-005            585  
+     2          55          420.371              1            531  
+     3          77          402.064       0.421143            341  
+     4          88          398.967              1            239  
+     5          99          367.624              1            331  
+     6         110          359.563              1            268  
+     7         121          349.778              1            192  
+     8         132          343.274              1            181  
+     9         143            338.5              1            169  
+    10         154          335.039              1            221  
+    11         165           330.69              1            269  
+    12         176          322.893              1            322  
+    13         187          308.388              1            377  
+    14         198          284.528              1            402  
+    15         209          261.764              1            230  
+    16         220           258.67              1           89.3  
+    17         231          257.989              1           83.5  
+    18         242          257.725              1           83.8  
+    19         253          256.984              1           83.1  
+                                                        First-order 
+ Iteration  Func-count       f(x)        Step-size       optimality
+    20         264          256.419              1           82.4  
+    21         275          253.255              1           79.2  
+    22         286          246.673              1            140  
+    23         297          227.976              1            231  
+    24         308          194.247              1            287  
+    25         319          169.683              1            248  
+    26         330          158.557              1            186  
+    27         341          151.353              1           40.7  
+    28         352          150.536              1           21.9  
+    29         363          150.358              1           21.3  
+    30         374          150.206              1           10.5  
+    31         385            150.2              1             10  
+    32         396          150.195              1           9.34  
+    33         407           150.19              1           8.84  
+    34         418          150.175              1           7.77  
+    35         429           150.14              1           6.89  
+    36         440          150.049              1           10.2  
+    37         451          149.838              1           14.7  
+    38         462          149.399              1           19.7  
+    39         473          148.643              1           21.2  
+                                                        First-order 
+ Iteration  Func-count       f(x)        Step-size       optimality
+    40         484          147.659              1           13.7  
+    41         506          147.475       0.565044           4.08  
+    42         517          147.468              1           4.37  
+    43         528          147.463              1           4.21  
+    44         539          147.462              1           4.24  
+    45         550          147.458              1           4.22  
+    46         561          147.446              1           4.41  
+    47         572          147.417              1           4.24  
+    48         583          147.334              1           4.46  
+    49         594          147.034              1            8.7  
+    50         605          146.471              1           15.1  
+    51         616          145.648              1           12.8  
+    52         627          143.856              1           9.51  
+    53         638          143.627              1           11.9  
+    54         649          143.597              1           3.46  
+    55         660          143.596              1           3.42  
+    56         671          143.595              1           3.41  
+    57         682          143.594              1           3.39  
+    58         693           143.59              1           3.36  
+    59         704           143.58              1           3.43  
+                                                        First-order 
+ Iteration  Func-count       f(x)        Step-size       optimality
+    60         715          143.555              1           5.86  
+    61         726          143.492              1            9.5  
+    62         737          143.335              1           14.8  
+    63         748          142.976              1           21.6  
+    64         759          142.282              1           27.7  
+    65         770          141.477              1           25.3  
+    66         781          141.107              1           14.6  
+    67         792          140.927              1            1.2  
+    68         803          140.881              1           3.33  
+    69         814          140.878              1           1.04  
+    70         825          140.878              1           1.05  
+    71         836          140.878              1           1.06  
+    72         847          140.878              1           1.07  
+    73         858          140.877              1           1.43  
+    74         869          140.876              1           2.69  
+    75         880          140.871              1           4.57  
+    76         891           140.86              1           7.24  
+    77         902          140.837              1           10.3  
+    78         913          140.797              1           11.8  
+    79         924          140.752              1           9.18  
+                                                        First-order 
+ Iteration  Func-count       f(x)        Step-size       optimality
+    80         935          140.726              1           3.67  
+    81         946          140.721              1          0.568  
+    82         957          140.721              1          0.191  
+    83         968          140.721              1          0.186  
+    84         979          140.721              1          0.185  
+    85         990          140.721              1          0.183  
+    86        1001          140.721              1           0.18  
+    87        1012          140.721              1          0.326  
+    88        1023           140.72              1          0.582  
+    89        1034           140.72              1           1.01  
+    90        1045          140.718              1           1.68  
+    91        1056          140.715              1           2.73  
+    92        1067          140.706              1           4.27  
+    93        1078          140.687              1           6.11  
+    94        1089          140.652              1           7.15  
+    95        1100          140.613              1           5.56  
+    96        1111          140.593              1            2.2  
+    97        1122           140.59              1          0.448  
+    98        1133           140.59              1          0.423  
+    99        1144           140.59              1          0.419  
+                                                        First-order 
+ Iteration  Func-count       f(x)        Step-size       optimality
+   100        1155           140.59              1          0.417  
+   101        1166           140.59              1          0.413  
+   102        1177           140.59              1          0.407  
+   103        1188           140.59              1          0.396  
+   104        1199          140.589              1          0.379  
+   105        1210          140.587              1          0.349  
+   106        1221          140.583              1          0.298  
+   107        1232          140.572              1          0.217  
+   108        1243          140.545              1          0.198  
+   109        1254          140.491              1          0.323  
+   110        1265          140.423              1          0.625  
+   111        1276          140.388              1          0.588  
+   112        1287          140.378              1          0.122  
+   113        1298          140.376              1          0.118  
+   114        1309          140.376              1         0.0581  
+   115        1320          140.376              1         0.0148  
+   116        1331          140.376              1        0.00222  
+Optimization terminated: relative infinity-norm of gradient less than options.TolFun.
+
+Computing finite-difference Hessian using user-supplied objective function.
+ 
+Estimation took 0.063977 minutes.
+ 
+Convergence achieved.
+Value of the log-likelihood function at convergence: -140.376
+Taking inverse of hessian for standard errors.
+The value of grad*inv(hessian)*grad is: 1.1523e-008
+ 
+ESTIMATION RESULTS
+ 
+              ---------------------------- 
+                Est         SE      t-stat
+ic            -0.3411     0.0940    -3.6276
+oc            -1.4440     0.4984    -2.8970
+inccool        0.2777     0.0567     4.9000
+asc2          -0.0738     0.4228    -0.1745
+asc3          -0.7651     0.7257    -1.0543
+asc4          -1.5840     0.5906    -2.6819
+asc5          -0.4963     1.6524    -0.3003
+asc6          -0.1170     1.6394    -0.0714
+asc7          -4.2388     2.3267    -1.8218
+nestparam      0.5447     0.1800     3.0264
+ 
+ 
+You can access the estimated parameters as variable paramhat,
+the gradient of the negative of the log-likelihood function as variable grad,
+the hessian of the negative of the log-likelihood function as variable hessian,
+and the inverse of the hessian as variable ihess.
+The hessian is calculated by the BFGS updating procedure.
+ 
+Predict shares at estimated coefficients.
+Actual and predicted shares
+     Alt      Actual    Predicted
+    1.0000    0.7440    0.7454
+    2.0000    0.0160    0.0157
+    3.0000    0.0040    0.0040
+    4.0000    0.1040    0.1029
+    5.0000    0.0960    0.0923
+    6.0000    0.0040    0.0050
+    7.0000    0.0320    0.0347
+
+Predicted probabilities are held in matrix probs, which has size NALTxNCS.

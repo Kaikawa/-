@@ -19,8 +19,8 @@ vl=XMAT(:,11);
 
 for n=1:NCS
   if mt(n*5-4,1)==1 | vl(n*5-4,1)==1
-  vv=v(IDCASE==n,1)*coef(3,1);
-  vy=v(IDCASE==n & IDDEP==1,1)*coef(3,1);
+  vv=v(IDCASE==n,1)*coef(end);
+  vy=v(IDCASE==n & IDDEP==1,1)*coef(end);
   else
   vv=v(IDCASE==n,1);
   vy=v(IDCASE==n & IDDEP==1,1);

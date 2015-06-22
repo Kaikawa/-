@@ -1,0 +1,63 @@
+Standard logit of heating system choice of 900 houses, with explanatory vars: installation cost and operating cost.
+Checking the data and specifications.
+Inputs have been checked and look fine.
+わっしょいわっしょいわっしょい
+Start estimation
+The negative of the log-likelihood is minimized,
+which is the same as maximizing the log-likelihood.
+                                                        First-order 
+ Iteration  Func-count       f(x)        Step-size       optimality
+     0           4          1448.49                           723
+     1           8          1229.19     0.00138343            292  
+     2          12          1119.51              1            145  
+     3          16          1101.57              1           58.8  
+     4          20          1097.82              1           34.8  
+     5          24          1096.35              1           25.7  
+     6          28          1093.37              1           6.26  
+     7          32          1093.13              1           1.62  
+     8          36          1093.11              1          0.162  
+     9          40          1093.11              1         0.0351  
+    10          44          1093.11              1        0.00174  
+    11          48          1093.11              1       0.000259  
+
+<a href = "matlab: helpview([docroot '/toolbox/optim/msg_csh/optim_msg_csh.map'],'local_min_unconstrained','CSHelpWindow');">Local minimum found</a>.
+
+Optimization completed because the <a href = "matlab: helpview([docroot '/toolbox/optim/msg_csh/optim_msg_csh.map'],'grad_size','CSHelpWindow');">size of the gradient</a> is less than
+the default value of the <a href = "matlab: helpview([docroot '/toolbox/optim/msg_csh/optim_msg_csh.map'],'function_tolerance','CSHelpWindow');">function tolerance</a>.
+
+<<a href = "matlab: createExitMsg('fminusub',1.000000e+00,true,true,'fminunc',3.583651e-07,'default',1.000000e-06,0.000000e+00,'',0.000000e+00,0.000000e+00,'',0.000000e+00);">stopping criteria details</a>>
+
+
+指定した目的関数を使用して、有限差分ヘッセ行列を計算します。
+ 
+Estimation took 0.049878 minutes.
+ 
+Convergence achieved.
+Value of the log-likelihood function at convergence: -1093.1122
+Taking inverse of hessian for standard errors.
+The value of grad*inv(hessian)*grad is: 1.3406e-10
+ 
+ESTIMATION RESULTS
+ 
+              ---------------------------- 
+                Est         SE      t-stat
+ic            -0.5810     0.0394   -14.7371
+oc            -0.4253     0.0343   -12.4110
+ 
+ 
+You can access the estimated parameters as variable paramhat,
+the gradient of the negative of the log-likelihood function as variable grad,
+the hessian of the negative of the log-likelihood function as variable hessian,
+and the inverse of the hessian as variable ihess.
+The hessian is calculated by the BFGS updating procedure.
+ 
+Predict shares at estimated coefficients.
+Actual and predicted shares
+     Alt      Actual    Predicted
+    1.0000    0.6367    0.4968
+    2.0000    0.1433    0.2416
+    3.0000    0.0711    0.1110
+    4.0000    0.0933    0.0571
+    5.0000    0.0556    0.0935
+
+Predicted probabilities are held in vector probs, which has size NROWSx1.
