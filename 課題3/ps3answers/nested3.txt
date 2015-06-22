@@ -1,0 +1,102 @@
+new , 10000;
+screen on;
+output file=nestout3.txt reset;
+nobs = 250;
+nalt = 7;
+load dat[250,18]=nested1.asc;
+
+depid=dat[.,1];  @gives number of chosen alt@
+@create nobs x nalt matrix identifying chosen alt with 1, otherwise 0@
+depm=zeros(nobs,nalt);
+n=1;
+do while n .le nobs;
+  j=1;
+  do while j .le nalt;
+  if depid[n,1] .eq j; depm[n,j]=1; endif;
+  j=j+1;
+  endo;
+n=n+1;
+endo;
+
+hic=dat[.,2:8] ./ 100;  @heating installation cost, in hundreds of dollars.@
+cic=dat[.,9] ./ 100; @cooling installation cost, in hundreds of dollars.@
+hoc=dat[.,10:16] ./ 100; @heating operating cost, in hundreds of dollars.@
+coc=dat[.,17] ./ 100; @cooling operating cost, in hundreds of dollars.@
+inc=dat[.,18];
+inc=inc;
+z=zeros(nobs,1);
+one=ones(nobs,1);
+
+@Create the variables to enter into the model.@
+cic=cic .* ones(nobs,4);
+cic=cic ~ zeros(nobs,3);
+coc=coc .* ones(nobs,4);
+coc=coc ~ zeros(nobs,3);
+incr=z~z~inc~z~z~z~inc; @Income entering the room systems.@
+incc=inc~inc~inc~inc~z~z~z; @Income entering cooling systems.@
+cc=one~one~one~one~z~z~z; @Constant for cooling systems.@
+
+@create matrix of explanatory variables@
+@ with nobs*nalt rows and one column for each variable@
+hic=reshape(hic,nobs*nalt,1);
+cic=reshape(cic,nobs*nalt,1);
+hoc=reshape(hoc,nobs*nalt,1);
+coc=reshape(coc,nobs*nalt,1);
+incr=reshape(incr,nobs*nalt,1);
+incc=reshape(incc,nobs*nalt,1);
+cc=reshape(cc,nobs*nalt,1);
+
+
+vars=hic~cic~hoc~coc~incr~incc~cc;
+
+@Do you want a nested logit or a standard logit?@
+@Set nl=1 for nested, nl=0 for standard logit.@
+
+nl=1;
+
+@The program works for two nests. Identify the alternatives in each nest.@
+nest1={1,2,3,4};
+nest2={5,6,7};
+
+@starting values:@
+@coefficient for each variable plus log-sum coefficient if nl=1@
+@ Usueful hint: if doing nested logit, first estimate a standard logit and@
+@ use the estimated standard logit coefs as starting values for@
+@ the nested logit and 1 for log-sum coef.@
+b={-.85, -.26, -1.35, -1.41, -.58, .31, -10.6, 1, 1};
+
+xmat=ones(nobs,1); @to use in maxlik@
+library maxlik,pgraph;
+#include maxlik.ext; 
+maxset;
+_max_GradTol=0.001;
+_max_MaxIters=100;
+_max_Algorithm=5; 
+{beta,f,g,cov,ret}=maxlik(xmat,0,&ll,b);
+call maxprt(beta,f,g,cov,ret);
+
+
+/*Log-Likelihood routine for nested logit with two nests.*/
+proc ll(b,x);
+@uses globals vars,depm,nobs,nalt,nest1,nest2,nl@
+local ev, p, c, k, ev1, ev2, num;
+if nl .eq 1;
+  c=b[1:(rows(b)-2),1];
+  k=b[rows(b)-1:rows(b),1];
+else;
+  c=b;
+  k=ones(2,1);
+endif;
+ev=exp(vars * c);
+ev=reshape(ev,nobs,nalt);
+ev[.,nest1]=ev[.,nest1].^(1 ./ k[1]);
+ev[.,nest2]=ev[.,nest2].^(1 ./ k[2]);
+ev1=sumc(ev[.,nest1]');
+ev2=sumc(ev[.,nest2]');
+num=(ev1.^(k[1]-1)).*sumc(depm[.,nest1]') + (ev2.^(k[2]-1)).*sumc(depm[.,nest2]');
+p=sumc((ev .* depm)').* num ./ ((ev1.^k[1])+(ev2.^k[2]));
+retp(ln(p));
+endp;
+
+
+
