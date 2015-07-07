@@ -120,4 +120,68 @@ which is the same as maximizing the log-likelihood.
    101        1166           140.59              1          0.413  
    102        1177           140.59              1          0.407  
    103        1188           140.59              1          0.396  
-   104        1199          140.589    
+   104        1199          140.589              1          0.379  
+   105        1210          140.587              1          0.349  
+   106        1221          140.583              1          0.299  
+   107        1232          140.572              1          0.218  
+   108        1243          140.545              1           0.19  
+   109        1254          140.491              1          0.266  
+   110        1265          140.423              1          0.556  
+   111        1276          140.388              1          0.551  
+   112        1287          140.378              1          0.112  
+   113        1298          140.376              1          0.115  
+   114        1309          140.376              1         0.0562  
+   115        1320          140.376              1         0.0142  
+   116        1331          140.376              1         0.0023  
+
+<a href = "matlab: helpview([docroot '/toolbox/optim/msg_csh/optim_msg_csh.map'],'local_min_unconstrained','CSHelpWindow');">Local minimum found</a>.
+
+Optimization completed because the <a href = "matlab: helpview([docroot '/toolbox/optim/msg_csh/optim_msg_csh.map'],'grad_size','CSHelpWindow');">size of the gradient</a> is less than
+the default value of the <a href = "matlab: helpview([docroot '/toolbox/optim/msg_csh/optim_msg_csh.map'],'function_tolerance','CSHelpWindow');">function tolerance</a>.
+
+<<a href = "matlab: createExitMsg('fminusub',1.000000e+00,true,true,'fminunc',5.709109e-07,'default',1.000000e-06,0.000000e+00,'',0.000000e+00,0.000000e+00,'',0.000000e+00);">stopping criteria details</a>>
+
+
+指定した目的関数を使用して、有限差分ヘッセ行列を計算します。
+ 
+Estimation took 0.023928 minutes.
+ 
+Convergence achieved.
+Value of the log-likelihood function at convergence: -140.376
+Taking inverse of hessian for standard errors.
+The value of grad*inv(hessian)*grad is: 1.2889e-08
+ 
+ESTIMATION RESULTS
+ 
+              ---------------------------- 
+                Est         SE      t-stat
+ic            -0.3411     0.0940    -3.6276
+oc            -1.4440     0.4984    -2.8970
+inccool        0.2777     0.0567     4.9000
+asc2          -0.0738     0.4228    -0.1745
+asc3          -0.7651     0.7257    -1.0543
+asc4          -1.5840     0.5906    -2.6819
+asc5          -0.4963     1.6524    -0.3004
+asc6          -0.1170     1.6393    -0.0714
+asc7          -4.2388     2.3267    -1.8218
+nestparam      0.5447     0.1800     3.0264
+ 
+ 
+You can access the estimated parameters as variable paramhat,
+the gradient of the negative of the log-likelihood function as variable grad,
+the hessian of the negative of the log-likelihood function as variable hessian,
+and the inverse of the hessian as variable ihess.
+The hessian is calculated by the BFGS updating procedure.
+ 
+Predict shares at estimated coefficients.
+Actual and predicted shares
+     Alt      Actual    Predicted
+    1.0000    0.7440    0.7454
+    2.0000    0.0160    0.0157
+    3.0000    0.0040    0.0040
+    4.0000    0.1040    0.1029
+    5.0000    0.0960    0.0923
+    6.0000    0.0040    0.0050
+    7.0000    0.0320    0.0347
+
+Predicted probabilities are held in matrix probs, which has size NALTxNCS.

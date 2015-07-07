@@ -1,0 +1,232 @@
+new , 10000;
+screen on;
+output file=pfcout5.txt reset;
+nobs = 453;
+nalt = 4;
+
+load vars;
+load depm;
+load depid;
+vars[.,2]=vars[.,2] ./10; @To scale the time.@
+
+print "Estimated parameters.";
+print "Increase car cost by 50%.";
+cost=reshape(vars[.,1],nobs,nalt);
+cost[.,1]=cost[.,1].*1.5;
+cost=reshape(cost,nobs*nalt,1);
+vars[.,1]=cost;
+
+
+
+/*The program uses the full normalized covariance matrix.*/
+
+
+@Parameter values:@
+@a coefficient for each variable plus @
+@ parameters of the choleski factor of cov matrix@
+@Covariance matrix of differences from first alt is @
+@normalized such that its top-left element is 1.@
+@Other elements of this choleski factor are estimated.@
+
+@These are estimated parameters@
+
+b={        -0.3252     
+           -0.3950     
+           -2.2592     
+           -1.4636      
+           -1.2500     
+            0.2887     
+            0.7497     
+           -0.5276     
+            0.4832     
+            0.4468 };
+b=b';
+
+
+@ Number of repetitions to use in forecasting.@;
+nrep=100;
+
+@Seed to use in random number generator.@
+seed2=246;
+
+@Random draws to use in simulation.@
+err=rndus(nobs,((nalt-1)*nrep),seed2);
+
+@Create matrixes to use in reconstructing the covariance matrix.@
+k1={1};
+k1=sqrt(k1);   @Top-left element of Choleski factor for J-1 alts minus alt 1@
+               @ k2 has ones on and below diagonal and zeros above@
+               @ It is used to create lower-triang Chol after expanding@
+               @ vector into a symmetric matrix, below.@
+k2=eye(nalt-1);
+i=1;
+do while i .le (nalt-1);
+  j=1;
+  do while j .lt i;
+    k2[i,j]=1;
+    j=j+1;
+  endo;
+  i=i+1;
+endo;
+k3=zeros(1,nalt-1); @Becomes left column of omega@
+k4=zeros(nalt,1);   @Becomes top row of omega@
+
+@Create transformation matrices and hold them in mm.@
+mm=zeros(nalt,(nalt-1)*nalt); 
+i=1;
+do while i .le nalt;
+   m=eye(nalt);
+   m[.,i]=-ones(nalt,1);
+   alt=ones(nalt,1);
+   alt[i,1]=0;
+   m=selif(m,alt);
+   mm[i,.]=vecr(m)';
+   i=i+1;
+endo;
+
+@ Collect the starting values into coefficients and covariance terms.@
+c=b[1:cols(vars),1];      @Coefficients@
+k=b[(cols(vars)+1):rows(b),1]; @Elements of covariance matrix.@
+k=k1|k;
+@Create the cov matrix.@
+
+omega=xpnd(k); 
+omega=omega .* k2;
+omega=omega * omega';
+omega=k3 | omega;
+omega=k4~omega;
+
+
+@Create the chol factor for each alt. and hold in s@
+s=zeros(nalt,(nalt*(nalt-1)/2)); 
+i=1;
+do while i .le nalt;
+   m=reshape(mm[i,.],nalt-1,nalt);
+   m=chol(m*omega*m')';
+   s[i,.]=vech(m)';  @Vector of lower triangular portion of chol.@
+   i=i+1;
+endo;
+
+@ Calculate probability for each alternative. @
+
+p=zeros(nobs,nalt);
+i=1;
+do while i .le nalt;
+
+   @Transform variables to negative of non-i alt. minus alt i@
+
+   vars2=zeros(nobs*(nalt-1),cols(vars));
+   k=1;
+   w=zeros(nalt,1);
+   w[i,1]=1;
+   do while k .le cols(vars);
+     ww=reshape(vars[.,k],nobs,nalt);
+     ww= -(ww - ww[.,i]);
+     ww=delif(ww',w)';
+     vars2[.,k]=reshape(ww,nobs*(nalt-1),1);
+     k=k+1;
+   endo;
+
+
+   @ Calculate V and then call ghk for each person.@
+   v=vars2 * c;
+   v=reshape(v,nobs,(nalt-1));
+   n=1;
+   do while n .le nobs;
+     mu=v[n,.];
+     ss=s[i,.];
+     u=reshape(err[n,.],nrep,(nalt-1));
+     p[n,i]=ghk(mu,ss,u);
+     n=n+1;
+   endo; 
+i=i+1;
+endo;
+
+print "Predicted shares:";
+print meanc(p);
+print "total:";
+print sumc(meanc(p));
+stop;
+
+
+
+/*         
+
+Geweke-Hajivassiliou-Keane Simulator (GHK)
+     The GHK procedure assumes that U is an array of uniform [0,1] variates,
+independent within columns, and in general independent between columns.
+
+        modified from Paul Ruud's ghk_1 proc to simulate each of NREP 
+repetitions for each observation
+
+        also restricted to negative orthant probabilities
+
+MU  is an  1 x M  vector of upper truncation points (systematic utility of 
+ chosen alternative minus that of nonchosen alt
+C   is an  1 x (M+1)*M/2  of choleski factors in vec form (lower triangular portion)
+U   is an  NREP x M  matrix of uniform variates
+
+where M+1 is the number of alternatives and NREP is the number of repetitions
+
+
+*/
+
+
+PROC GHK(MU,C,U);
+LOCAL N,M,J,JJ,II,TB,TT,V,arg,res,P;
+N  = rows(U);
+M  = cols(U);
+J  = 1;
+JJ = 0;
+II = 1;
+TB = NDTR(MU[1,1]./C[1,1]);                       @ 1ST COMPONENT BOUNDS @
+TT = NDTRI(U[.,1].*TB);
+P  = TB;
+DO WHILE J < M;                                   @ LOOP OVER COMPONENTS @
+  JJ = JJ + J;
+  J  = J + 1;                                     @ COMPONENT J BOUNDS @
+  arg = ((MU[1,J]-sumc((C[1,JJ+II].*TT)'))./C[1,JJ+J]);
+  TB  = NDTR(arg);
+  res = NDTRI(U[.,J].*TB);
+  if not(res<=arg); res=-1e10*ones(rows(res),1); endif;
+  TT  = TT~res;                                   @ COMPONENT J DRAW @
+  II  = II|J;
+  P   = P.*TB;                                    @ ACCUMULATEPROBABILITY @
+ENDO;
+RETP(sumc(P) ./ N);
+ENDP;
+
+/* Procs to calculate cum normal and inverse cum norm, for use
+   by proc ghk   */
+
+      PROC NDTR(X);
+      LOCAL AX,T,P,D;
+      AX=ABS(X);
+      T=1./(1 + 0.2316419.*AX);
+      D=PDFN(X);
+      P=D.*T.*(((( 1.330274.*T-1.821256).*T+1.781478).*T-0.3565638)
+        .*T+0.3193815);
+@      if (p .le. .000001) p = .000001
+      if (p .ge. .999999) p = .999999  @
+      P = P.*(X.<0) + (1-P).*(X.>=0);
+      RETP(P);
+      ENDP;
+
+proc ndtri( prob );  @  OLD IBM FORTRAN FUNCTION  @
+    local r, c, a, b, w, x;
+
+    r = rows(prob); c = cols(prob);
+    prob = vec(prob);
+    a = 2.515517|0.802853|0.010328;
+    b = 1.000000|1.432788|0.189269|0.001308;
+
+    w = sqrt((-2*ln(minc(prob'|(1-prob)')))).^(seqa(0,1,4)');
+    x = w[.,2] - (w[.,1:3]*a)./(w*b);
+    x = x.*((-1)^(prob.<(0.5*ones(rows(prob),1))));
+    x = reshape(x,c,r)';
+
+    retp( x );
+endp;
+
+
+

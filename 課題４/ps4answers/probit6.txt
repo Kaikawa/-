@@ -1,0 +1,238 @@
+@revised March 12, 2001@
+new , 10000;
+screen on;
+output file=pout6rev.txt reset;
+nobs = 453;
+nalt = 4;
+
+load vars;
+load depm;
+load depid;
+
+print "shares";
+meanc(depm);
+
+
+@Transform each variable to be negative of nonchosen alt minus chosen alt.@
+@ This uses a proc defined at the bottom of this program.@
+@ It returns a matrix that is size nobs*(alt-1) x k @
+@ where k is number of variables in vars@
+vars=tt(vars);
+
+vars[.,2]=vars[.,2] ./10; @To scale the time.@
+
+
+/*The program estimates a structured covariance matrix.*/
+/* The form is   1  r  0  0
+                 r  m  0  0
+                 0  0  1  0
+                 0  0  0  1
+
+   which, when differenced against alt 1 and normalized, is
+
+                  0    0        0           0
+                  0    1   (1-r)/(1+s) (1-r)/(1+s)
+                  0    *     2/(1+s)     1/(1+s)
+                  0    *     *           2/(1+s)  
+
+where s=m-2r.
+
+                                         */
+
+
+@starting values:@
+@a coefficient for each variable plus s and r@
+
+b={-.3252, -.3950, -2.2592, -1.4636, -1.2500};
+k={ 2, .3 };              @Covariance parameters s and r@
+b=b|k;
+
+
+@ Number of repetitions to use in estimation.@;
+nrep=100;
+
+@Seed to use in random number generator.@
+seed2=246;
+
+@Random draws to use in simulation.@
+err=rndus(nobs,((nalt-1)*nrep),seed2);
+
+@Create matrixes to use in ll proc.@
+k1={1};
+k1=sqrt(k1);
+k2=eye(nalt-1);
+i=1;
+do while i .le (nalt-1);
+  j=1;
+  do while j .lt i;
+    k2[i,j]=1;
+    j=j+1;
+  endo;
+  i=i+1;
+endo;
+k3=zeros(1,nalt-1);
+k4=zeros(nalt,1);
+
+mm=zeros(nalt,(nalt-1)*nalt); @Holds transformation matrices.@
+i=1;
+do while i .le nalt;
+   m=eye(nalt);
+   m[.,i]=-ones(nalt,1);
+   alt=ones(nalt,1);
+   alt[i,1]=0;
+   m=selif(m,alt);
+   mm[i,.]=vecr(m)';
+   i=i+1;
+endo;
+
+xmat=ones(nobs,1); @to use in maxlik@
+library maxlik,pgraph;
+#include maxlik.ext; 
+maxset;
+_max_GradTol=0.005;
+_max_MaxIters=800;
+_max_Algorithm=2; 
+{beta,f,g,cov,ret}=maxlik(xmat,0,&ll,b);
+call maxprt(beta,f,g,cov,ret);
+
+
+/* Proc to transform variables to negative of nonchosen alt. minus chosen alt*/
+
+proc tt(v);
+@uses globals depid, depm, nalt, nobs @
+local k, n, w, ww ;
+k=cols(v);
+n=1;
+w=zeros(nobs*(nalt-1),k);
+do while n .le nobs;
+   ww=v[(n-1)*nalt+1:n*nalt,.];
+   ww= -(ww - ww[depid[n],.]);
+   w[(n-1)*(nalt-1)+1:(n*(nalt-1)),.]=delif(ww,depm[n,.]');
+   n=n+1;
+endo;
+retp(w);
+endp;
+
+
+
+/*Log-Likelihood routine for probit.*/
+/* This log-likelihood proc uses the ghk proc, given below.*/
+
+proc ll(b,x);
+@uses globals k1, k2, k3, k4, vars,depm,nobs,nalt, mm,seed,err@
+local c, k, omega, i, m, alt, s, v, n, r, mu, ss, u, p;
+
+c=b[1:cols(vars),1];      @Coefficients@
+k=b[(cols(vars)+1):rows(b),1]; @Elements of covariance matrix.@
+r=k[2,1];
+k=k[1,1];
+@This proc creates the cov matrix as follows.@
+
+omega=ones(nalt-1,nalt-1); 
+omega[2,2]=2;
+omega[3,3]=2;
+omega=omega ./ (1+k);
+
+omega[1,1]=omega[1,1] .* (1+k); @To make top-left element 1 after dividing by 1+k in previous line@
+omega[1,2]=omega[1,2] .* (1-r);
+omega[2,1]=omega[1,2];
+omega[1,3]=omega[1,3] .* (1-r);
+omega[3,1]=omega[1,3];
+omega=k3 | omega;
+omega=k4~omega;
+
+s=zeros(nalt,(nalt*(nalt-1)/2));  @Holds the chol factor for each chosen alt.@
+i=1;
+do while i .le nalt;
+   m=reshape(mm[i,.],nalt-1,nalt);
+   m=chol(m*omega*m')';
+   s[i,.]=vech(m)';  @Vector of lower triangular portion of chol.@
+   i=i+1;
+endo;
+v=vars * c;
+v=reshape(v,nobs,(nalt-1));
+p=zeros(nobs,1);
+n=1;
+do while n .le nobs;
+   mu=v[n,.];
+   ss=s[depid[n],.];
+   u=reshape(err[n,.],nrep,(nalt-1));
+   p[n,1]=ghk(mu,ss,u);
+   n=n+1;
+endo;
+retp(ln(p));
+endp;
+
+
+/* GHK Simulator
+modified from Paul Ruud's ghk_1 proc to simulate each of NREP 
+repetitions for each observation.
+
+MU  is an  1 x M  vector of upper truncation points (representative utility of 
+ chosen alternative minus that of nonchosen alt)
+C   is an  1 x (M+1)*M/2 vector of Choleski elements in vec form (lower triangular portion)
+U   is an  NREP x M  matrix of uniform variates
+
+where M+1 is the number of alternatives and NREP is the number of repetitions
+
+*/
+
+
+PROC GHK(MU,C,U);
+LOCAL N,M,J,JJ,II,TB,TT,V,arg,res,P;
+N  = rows(U);
+M  = cols(U);
+J  = 1;
+JJ = 0;
+II = 1;
+TB = NDTR(MU[1,1]./C[1,1]);                       @ 1ST COMPONENT BOUNDS @
+TT = NDTRI(U[.,1].*TB);
+P  = TB;
+DO WHILE J < M;                                   @ LOOP OVER COMPONENTS @
+  JJ = JJ + J;
+  J  = J + 1;                                     @ COMPONENT J BOUNDS @
+  arg = ((MU[1,J]-sumc((C[1,JJ+II].*TT)'))./C[1,JJ+J]);
+  TB  = NDTR(arg);
+  res = NDTRI(U[.,J].*TB);
+  if not(res<=arg); res=-1e10*ones(rows(res),1); endif;
+  TT  = TT~res;                                   @ COMPONENT J DRAW @
+  II  = II|J;
+  P   = P.*TB;                                    @ ACCUMULATEPROBABILITY @
+ENDO;
+RETP(sumc(P) ./ N);
+ENDP;
+
+/* Procs to calculate cum normal and inverse cum norm, for use
+   by proc ghk   */
+
+      PROC NDTR(X);
+      LOCAL AX,T,P,D;
+      AX=ABS(X);
+      T=1./(1 + 0.2316419.*AX);
+      D=PDFN(X);
+      P=D.*T.*(((( 1.330274.*T-1.821256).*T+1.781478).*T-0.3565638)
+        .*T+0.3193815);
+@      if (p .le. .000001) p = .000001
+      if (p .ge. .999999) p = .999999  @
+      P = P.*(X.<0) + (1-P).*(X.>=0);
+      RETP(P);
+      ENDP;
+
+    proc ndtri( prob );  @  OLD IBM FORTRAN FUNCTION  @
+    local r, c, a, b, w, x;
+
+    r = rows(prob); c = cols(prob);
+    prob = vec(prob);
+    a = 2.515517|0.802853|0.010328;
+    b = 1.000000|1.432788|0.189269|0.001308;
+
+    w = sqrt((-2*ln(minc(prob'|(1-prob)')))).^(seqa(0,1,4)');
+    x = w[.,2] - (w[.,1:3]*a)./(w*b);
+    x = x.*((-1)^(prob.<(0.5*ones(rows(prob),1))));
+    x = reshape(x,c,r)';
+
+    retp( x );
+endp;
+
+
+
