@@ -91,8 +91,7 @@ NAMES={'cost' 'time' 'carpool' 'bus' 'train' };
 
 %Give starting values for the coefficients of these variables.
 
-%B=zeros(1,size(IDV,2));
-B = [-0.2559 -0.2890 -1.8583 -1.0936 -0.9234];
+B=zeros(1,size(IDV,2));
 
 
 %Give starting values for the elements of the Choleski factor of the normalized covariance of utility differences
@@ -103,13 +102,13 @@ B = [-0.2559 -0.2890 -1.8583 -1.0936 -0.9234];
 % 3 4 5
 % etc.
 
-C=[ 0.4131 0.3743 -0.1197 0.1140 0.3264]; %This represents independent utilities
+C=[ 0.5000    0.8660   0.5000    0.2887    0.8165]; %This represents independent utilities
 
 
 %Type of simulation: 1=accept-reject, 2=logit smoothed accept-reject, 3= GHK
 %Do not use accept-reject (SIMTYPE=1) for estimation since the gradient-based optimizer will fail.
 %Use accept-reject only for prediction (ie when PREDICT==2).
-SIMTYPE=2;
+SIMTYPE=1;
 
 %If you are using logit-smoothed accept-reject simulator (SIMTYPE=1), then set the scale to be used
 %in smoothing. Simulated utility is multiplied by this scale when entering the logit formula
